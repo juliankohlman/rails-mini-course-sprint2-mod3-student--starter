@@ -1,11 +1,11 @@
 class Order < ApplicationRecord
   belongs_to :customer
   has_many :order_products
-  has_many :products through: :order_products
-  def products
-    product_ids = OrderProduct.where(order_id: id).pluck(:product_id)
-    Product.find(product_ids)
-  end
+  has_many :products, through: :order_products
+
+
+  validates :status, inclusion: { in: ['pending', 'shipped'] }
+
 
   def shippable?
     status != "shipped" && products.count >= 1
@@ -14,4 +14,5 @@ class Order < ApplicationRecord
   def ship
     shippable? && update(status: "shipped")
   end
+
 end
