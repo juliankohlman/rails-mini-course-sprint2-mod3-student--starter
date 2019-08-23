@@ -1,4 +1,7 @@
 class Product < ApplicationRecord
+  scope :in_stock, -> { where('inventory > ?', 0).order(:cost) }
+  scope :out_of_stock, -> {where('inventory = 0').order(:cost)}
+
 	has_many :order_products
 	has_many :orders, through: :order_products
 
